@@ -1,0 +1,3 @@
+[submodule "lib/kanren"]
+	path = lib/kanren
+	url = https://github.com/arsalanc-v2/kanren/
