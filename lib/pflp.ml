@@ -2,10 +2,10 @@ open Base
 open Mk.Micro
 open Mk.Mini
 
-type probability = float
+exception PflpFailure of string
+let[@inline] failwith msg = raise (PflpFailure msg)
 
-(* dist is object element being operated on *)
-(* events vs dist (rep by goal) *)
+type probability = float
 
 let probability p = Atom (Float p)
 let dist x p = call_fresh (fun v -> v === Pair (x, probability p))
@@ -21,17 +21,18 @@ let certainly x = dist x 1.0
 let ( $ ) a b = disj a b
 
 let member xs = disj_plus xs
-(* probabilities should add up to 1 - valid distribution *)
-let enum xs ps = match (List.map2 ~f:(fun x p -> dist x p) xs ps) with
+
+(* probabilities should sum to 1.0 *)
+let enum xs ps = 
+  match (List.map2 ~f:(fun x p -> dist x p) xs ps) with
   | Ok l -> member l
   | Unequal_lengths -> failwith "unequal number of events and probabilities"
+  
 let uniform xs = 
   let len = List.length xs in
   if len > 0 then let p = 1.0 /. (Float.of_int len) in enum xs (List.init len ~f:(fun _ -> p))
   else failwith "cannot construct uniform distribution without any events"
 
-(* does not evaluate arguments *)
-(* each result is a state with a single distribution - from cartesian product of all distributions *)
 let ( >>>= ) g f sc =
   let corral = function
     | Pair (_, Atom (Float p)), Pair (y, Atom (Float q)) -> dist y (p *. q)
@@ -74,25 +75,3 @@ let ( $$ ) pred g sc =
   let fd = all_values (fg sc) in
   let p = List.map fd ~f:dist_to_probability in
   List.fold p ~init:0.0 ~f:(+.)
-
-(* let replicate_dist n rt = 
-  if n = 0 then certainly (Atom (Lst []))
-  else if n > 0 then join_with concat  (flip_coin (n - 1))
-  else failwith ">= 0 number of replications required" *)
-
-
-
-(* let fg = freshN (List.length rd) (fun xs -> 
-  match List.map2 xs rd ~f:(fun v d -> v === d) with
-    | Ok l -> conj_plus l
-    | Unequal_lengths -> failwith "unequal number"
-) in *)
-
-   (* | Cons ((subst, counter), rest) -> Cons ((Map.fold subst ~init:dist_example ~f, counter), loop rest) *)
-    (* in
-    let x = dist_to_event a in
-    let p = dist_to_probability a in
-    let b = f x in
-    let y = dist_to_event b in
-    let q = dist_to_probability b in
-    dist y (p *. q) *)
