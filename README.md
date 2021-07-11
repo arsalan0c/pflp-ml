@@ -1,16 +1,16 @@
-# pflp-OCaml
+# pflp.ml
 
 An embedded DSL for probabilistic programming in OCaml, based on [PFLP](https://arxiv.org/pdf/1905.07212.pdf) and [kanren](https://github.com/arsalanc-v2/kanren)
 
 ## Installation
 The code can be obtained with:
 ```
-git clone --recursive https://github.com/arsalanc-v2/pflp-OCaml.git
+git clone --recursive https://github.com/arsalanc-v2/pflp.ml.git
 ```
 
 The examples can be run with:
 ```
-cd pflp-OCaml
+cd pflp.ml
 dune exec examples/main.exe
 ```
 
@@ -55,7 +55,7 @@ val ( >>>= ) :
   ('a -> (('b, Mk.Micro.term, 'c) Base.Map.t * 'd) Mk.Micro.stream) ->
   (Mk.Micro.term -> Mk.Micro.state -> Mk.Micro.state Mk.Micro.stream) ->
   'a -> Mk.Micro.state Mk.Micro.stream
-  
+
 val join_with :
   (Mk.Micro.term -> Mk.Micro.term -> Mk.Micro.term) ->
   ('a -> (('b, Mk.Micro.term, 'c) Base.Map.t * 'd) Mk.Micro.stream) ->
