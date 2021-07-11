@@ -1,9 +1,77 @@
 # pflp-OCaml
 
-An embedded DSL for probabilistic programming in OCaml, based on [pflp](https://arxiv.org/pdf/1905.07212.pdf) and [kanren](https://github.com/arsalanc-v2/kanren)
+An embedded DSL for probabilistic programming in OCaml, based on [PFLP](https://arxiv.org/pdf/1905.07212.pdf) and [kanren](https://github.com/arsalanc-v2/kanren)
 
-The examples can be run with
+## Installation
+The code can be obtained with:
 ```
+git clone --recursive https://github.com/arsalanc-v2/pflp-OCaml.git
+```
+
+The examples can be run with:
+```
+cd pflp-OCaml
 dune exec examples/main.exe
 ```
+
+## Interface
+```OCaml
+exception PflpFailure of Base.string
+val failwith : Base.string -> 'a
+
+type probability = Base.float
+val prob : Base.float -> Mk.Micro.term
+
+val dist :
+  Mk.Micro.term ->
+  Base.float ->
+  Mk.Micro.substitution * Mk.Micro.var -> Mk.Micro.state Mk.Micro.stream
+
+val dist_to_probability : Mk.Micro.term -> Base.float
+
+val dist_to_event : Mk.Micro.term -> Mk.Micro.term
+
+val certainly :
+  Mk.Micro.term ->
+  Mk.Micro.substitution * Mk.Micro.var -> Mk.Micro.state Mk.Micro.stream
+
+val ( $ ) :
+  ('a -> 'b Mk.Micro.stream) ->
+  ('a -> 'b Mk.Micro.stream) -> 'a -> 'b Mk.Micro.stream
+
+val member :
+  (Mk.Micro.state -> 'a Mk.Micro.stream) Base.List.t ->
+  Mk.Micro.state -> 'a Mk.Micro.stream
+
+val enum :
+  Mk.Micro.term Base.List.t ->
+  Base.float Base.List.t -> Mk.Micro.state -> Mk.Micro.state Mk.Micro.stream
+
+val uniform :
+  Mk.Micro.term Base.List.t ->
+  Mk.Micro.state -> Mk.Micro.state Mk.Micro.stream
+
+val ( >>>= ) :
+  ('a -> (('b, Mk.Micro.term, 'c) Base.Map.t * 'd) Mk.Micro.stream) ->
+  (Mk.Micro.term -> Mk.Micro.state -> Mk.Micro.state Mk.Micro.stream) ->
+  'a -> Mk.Micro.state Mk.Micro.stream
+  
+val join_with :
+  (Mk.Micro.term -> Mk.Micro.term -> Mk.Micro.term) ->
+  ('a -> (('b, Mk.Micro.term, 'c) Base.Map.t * 'd) Mk.Micro.stream) ->
+  (Mk.Micro.state ->
+   (('e, Mk.Micro.term, 'f) Base.Map.t * 'g) Mk.Micro.stream) ->
+  'a -> Mk.Micro.state Mk.Micro.stream
+
+val filter_dist :
+  (Mk.Micro.term -> bool) ->
+  ('a -> (('b, Mk.Micro.term, 'c) Base.Map.t * 'd) Mk.Micro.stream) ->
+  'a -> Mk.Micro.state Mk.Micro.stream
+
+val ( $$ ) :
+  (Mk.Micro.term -> bool) ->
+  ('a -> (('b, Mk.Micro.term, 'c) Base.Map.t * 'd) Mk.Micro.stream) ->
+  'a -> Base__Float.t
+```
+
 
