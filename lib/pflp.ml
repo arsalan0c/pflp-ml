@@ -7,8 +7,8 @@ let[@inline] failwith msg = raise (PflpFailure msg)
 
 type probability = float
 
-let probability p = Atom (Float p)
-let dist x p = call_fresh (fun v -> v === Pair (x, probability p))
+let prob p = Atom (Float p)
+let dist x p = call_fresh (fun v -> v === Pair (x, prob p))
 
 let dist_to_probability = function
   | Pair (_, Atom (Float p)) -> p
