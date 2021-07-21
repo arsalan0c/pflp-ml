@@ -31,11 +31,39 @@ let gte_two_heads_in_four = (fun coins -> match coins with
     | _ -> failwith "expected list of coins"
   ) $$ (flip_coin 4)
 
-let run () = begin
-  printf "coin\n%s" (stream_print (coin empty_state));
-  printf "uniform coin\n%s" (stream_print (uniform_coin empty_state));
-  printf "independent coins\n%s" (stream_print (independent_coins empty_state));
-  printf "dependent coins\n%s" (stream_print (dependent_coins empty_state));
-  printf "flip 2 coins\n%s" (stream_print (flip_coin 2 empty_state));
-  printf "probability of >= 2 heads in four flips\n%f\n\n" (gte_two_heads_in_four empty_state)
+let%expect_test _ = begin
+  printf "coin\n%s\n" (stream_print (coin empty_state));
+  [%expect {| 
+    coin
+    [(true, 0.5), ]
+    [(false, 0.5), ] |}];
+  printf "uniform coin\n%s\n" (stream_print (uniform_coin empty_state));
+  [%expect {| 
+    uniform coin
+    [(true, 0.5), ]
+    [(false, 0.5), ] |}];
+  printf "independent coins\n%s\n" (stream_print (independent_coins empty_state));
+  [%expect {| 
+    independent coins
+    [((true, false), 0.25), ]
+    [((true, true), 0.25), ]
+    [((false, false), 0.25), ]
+    [((false, true), 0.25), ] |}];
+  printf "dependent coins\n%s\n" (stream_print (dependent_coins empty_state));
+  [%expect {| 
+    dependent coins
+    [(false, 0.25), ]
+    [(true, 0.25), ]
+    [(false, 0.5), ] |}];
+  printf "flip 2 coins\n%s\n" (stream_print (flip_coin 2 empty_state));
+  [%expect {| 
+    flip 2 coins
+    [([true, false], 0.25), ]
+    [([true, true], 0.25), ]
+    [([false, false], 0.25), ]
+    [([false, true], 0.25), ] |}];
+  printf "probability of >= 2 heads in four flips\n%f\n\n" (gte_two_heads_in_four empty_state);
+  [%expect {| 
+    probability of >= 2 heads in four flips
+    0.687500 |}];
 end

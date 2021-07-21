@@ -1,2 +1,4 @@
-(executable (name main)
+(library (name examples)
+    (inline_tests)
+    (preprocess (pps ppx_expect))
     (libraries pflp mk base))

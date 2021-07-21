@@ -28,8 +28,22 @@ let all_five_or_six n = (fun dice -> match dice with
     | _ -> failwith "expected list of dice"
   ) $$ (roll_dice n)
 
-let run () = begin
+let%expect_test _ = begin
   printf "roll a die\n%s" (stream_print (roll_dice 1 empty_state));
+  [%expect {| 
+    roll a die
+    [([1], 0.16666666666666666), ]
+    [([2], 0.16666666666666666), ]
+    [([3], 0.16666666666666666), ]
+    [([4], 0.16666666666666666), ]
+    [([5], 0.16666666666666666), ]
+    [([6], 0.16666666666666666), ] |}];
   printf "six dice, all show six\n%f\n\n" (all_six 2 empty_state);
-  printf "three dice, all show either five or six\n%f\n\n" (all_five_or_six 3 empty_state)
+  [%expect {| 
+    six dice, all show six
+    0.027778 |}];
+  printf "three dice, all show either five or six\n%f\n\n" (all_five_or_six 3 empty_state);
+  [%expect {| 
+    three dice, all show either five or six
+    0.037037 |}];
 end
