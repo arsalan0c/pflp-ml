@@ -45,8 +45,8 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' && always() }}
 
       - name: Run build
-        run: dune build
+        run: opam exec -- dune build --root .
 
       - name: Run the unit tests
-        run: dune runtest
+        run: opam exec -- dune runtest --root .
         timeout-minutes: 1
