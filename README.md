@@ -1,4 +1,4 @@
-# pflp.ml
+# pflp-ml
 
 An embedded DSL for probabilistic programming in OCaml, based on 
 1. [PFLP](https://arxiv.org/pdf/1905.07212.pdf) by Dylus, Christiansen and Teegen 
