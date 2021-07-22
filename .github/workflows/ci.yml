@@ -44,7 +44,7 @@ jobs:
         run: opam install dune && opam install base && opam install ppx_expect && opam install . --with-test
 
       - name: Check formatting
-        run: make fmt
+        run: opam exec -- dune build --root . --auto-promote @fmt
         if: ${{ matrix.os == 'ubuntu-latest' && always() }}
 
       - name: Run build
