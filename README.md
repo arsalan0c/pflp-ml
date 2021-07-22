@@ -1,19 +1,23 @@
 # pflp.ml
 
-An embedded DSL for probabilistic programming in OCaml, based on [PFLP](https://arxiv.org/pdf/1905.07212.pdf) and [kanren](https://github.com/arsalanc-v2/kanren)
+An embedded DSL for probabilistic programming in OCaml, based on 
+1. [PFLP](https://arxiv.org/pdf/1905.07212.pdf) by Dylus, Christiansen and Teegen 
+2. [kanren](https://github.com/arsalanc-v2/kanren)
 
 ## Installation
+You will need `opam`, `OCaml` and `dune` .
+
 The code can be obtained with:
 ```
-git clone --recursive https://github.com/arsalanc-v2/pflp.ml.git
+git clone --recursive https://github.com/arsalanc-v2/pflp-ml.git
 ```
 
-The examples can be run with:
+## Tests
+The tests (examples) in `./examples` can be run with:
 ```
-cd pflp.ml
-dune exec examples/main.exe
+cd pflp-ml
+dune runtest
 ```
-
 ## Interface
 ```OCaml
 exception PflpFailure of Base.string
@@ -73,5 +77,8 @@ val ( $$ ) :
   ('a -> (('b, Mk.Micro.term, 'c) Base.Map.t * 'd) Mk.Micro.stream) ->
   'a -> Base__Float.t
 ```
+
+## References
+- [pflp reference implementation](https://github.com/finnteegen/pflp/)
 
 

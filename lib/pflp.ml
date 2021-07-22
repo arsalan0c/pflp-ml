@@ -12,12 +12,15 @@ let prob p = Atom (Float p)
 (** given an event and its probability, constructs a distribution *)
 let dist x p = call_fresh (fun v -> v === Pair (x, prob p))
 
+(** extracts a probability from a ditribution *)
 let dist_to_probability = function
   | Pair (_, Atom (Float p)) -> p
-  | _ -> failwith "distreq"
+  | _ -> failwith "expected a distribution"
+
+(** extracts an event from a distribution *)
 let dist_to_event = function
   | Pair (x, Atom (Float _)) -> x
-  | _ -> failwith "distreq"
+  | _ -> failwith "expected a distribution"
 
 (** creates a single-event distribution with a probability of 1.0 *)
 let certainly x = dist x 1.0
@@ -90,4 +93,3 @@ let ( $$ ) pred g sc =
   let fd = all_values (fg sc) in
   let p = List.map fd ~f:dist_to_probability in
   List.fold p ~init:0.0 ~f:(+.)
-
