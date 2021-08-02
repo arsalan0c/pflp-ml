@@ -37,7 +37,6 @@ jobs:
 
       - name: Install ocamlformat
         run: opam install ocamlformat.0.18.0
-        if: ${{ matrix.os == 'ubuntu-latest' }}
 
       - name: Install opam packages
         run: opam install dune && opam install base && opam install ppx_expect && opam install . --with-test
