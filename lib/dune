@@ -1,1 +1,3 @@
-library (name pflp) (libraries mk base)
+(library
+ (name pflp)
+ (libraries mk base))
