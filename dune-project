@@ -1,4 +1,2 @@
-(lang dune 2.7)
-  (name pflp - ml)
-  (license MIT) (authors "Arsalan Cheema")
+(lang dune 2.7) (license MIT) (authors "Arsalan Cheema")
   (maintainers "Arsalan Cheema")
