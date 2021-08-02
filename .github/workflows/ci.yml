@@ -1,24 +1,53 @@
 name: CI
+
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
+
 jobs:
-  build:
-    runs-on: ${{ matrix.operating-system }}
+  build-and-test:
     strategy:
+      fail-fast: false
+
       matrix:
-        operating-system: [macos-latest, ubuntu-latest]
-        ocaml-version: [ '4.10.0' ]
+        os:
+          - macos-latest
+          - ubuntu-latest
+
+        ocaml-compiler:
+          - 4.12.x
+
+    runs-on: ${{ matrix.os }}
+
     steps:
-    
-    - uses: actions/checkout@v2
-    - uses: ocaml/setup-ocaml@v1.1.11
-      with:
-        ocaml-version: ${{ matrix.ocaml-version }}
-    - name: Dependencies
-      run: opam install -t . --deps-only
-    - name: Build
-      run: opam exec -- dune build
-      
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use OCaml ${{ matrix.ocaml-compiler }}
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          dune-cache: ${{ matrix.os != 'macos-latest' }}
+     
+      - name: Kanren
+        run: git submodule update --init --recursive --remote
+
+      - name: Install ocamlformat
+        run: opam install ocamlformat.0.19.0
+
+      - name: Install opam packages
+        run: opam install dune && opam install base && opam install ppx_expect && opam install . --with-test
+
+      - name: Check formatting
+        run: opam exec -- dune build --root . --auto-promote @fmt
+        if: ${{ matrix.os == 'ubuntu-latest' && always() }}
+
+      - name: Run build
+        run: opam exec -- dune build --root .
+
+      - name: Run the unit tests
+        run: opam exec -- dune runtest --root .
+        timeout-minutes: 1
