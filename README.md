@@ -1,3 +1,5 @@
+[![CI](https://github.com/arsalanc-v2/pflp-ml/actions/workflows/ci.yml/badge.svg)](https://github.com/arsalanc-v2/pflp-ml/actions/workflows/ci.yml)
+
 # pflp-ml
 
 An embedded DSL for probabilistic programming in OCaml, based on 
