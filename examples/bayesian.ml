@@ -90,7 +90,7 @@ let cond_prob ps dx =
               | _ -> assert false)
         with
         | Ok b -> b
-        | Unequal_lengths -> assert false )
+        | Unequal_lengths -> assert false)
     | _ -> assert false)
   $$ dx
 
